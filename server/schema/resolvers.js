@@ -37,11 +37,12 @@ const resolvers = {
       },
       login: async (parent, { userInput }, context) => {
          try {
+            console.log(userInput);
             const user = await User.findOne({ $or: [{ username: userInput.username }, { email: userInput.email }] });
             if (!user) {
                throw new AuthenticationError('Error logging in!');
             }
-            const passwordCheck = await user.isCorrectPassword(password);
+            const passwordCheck = await user.isCorrectPassword(userInput.password);
             if (!passwordCheck) {
                throw new AuthenticationError('Error logging in!');
             }
