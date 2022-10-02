@@ -26,9 +26,9 @@ const resolvers = {
       }
    },
    Mutation: {
-      addUser: async (parent, args, context) => {
+      addUser: async (parent, { userInput }, context) => {
          try {
-            const user = await User.create({ ...args });
+            const user = await User.create({ ...userInput });
             const token = signToken(user);
             return { token, user };
          } catch (error) {
@@ -53,7 +53,7 @@ const resolvers = {
       },
       saveBook: async (parent, { bookInput }, context) => {
          try {
-            return await User.findOneByIdAndUpdate(
+            return await User.findByIdAndUpdate(
                context.user._id,
                {
                   $addToSet: {
@@ -73,7 +73,7 @@ const resolvers = {
       },
       removeBook: async (parent, { bookId }, context) => {
          try {
-            return await User.findOneByIdAndUpdate(
+            return await User.findByIdAndUpdate(
                context.user._id,
                {
                   $pull: {
